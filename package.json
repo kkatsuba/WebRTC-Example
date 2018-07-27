@@ -1,0 +1,14 @@
+{
+  "name": "webrtc-example",
+  "version": "1.0.0",
+  "description": "An 'as simple as it gets' WebRTC example.",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "keywords": [
+    "webrtc"
+  ],
+  "dependencies": {
+    "ws": "^3.3.2"
+  }
+}

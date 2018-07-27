@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>WebRTC in action</title>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    
+  </head>
+
+  <body>
+    <video id="localVideo" autoplay muted style="width:40%;"></video>
+    <video id="remoteVideo" autoplay style="width:40%;"></video>
+
+    <br />
+
+    <input type="text" id="call-id">
+    <button id="start" onclick="start(true)">Call</button>
+    <p>
+      Say someone you want to call this value
+      <span id="uuid"></span>
+    </p>
+
+    <script src="webrtc.js"></script>
+  </body>
+</html>
