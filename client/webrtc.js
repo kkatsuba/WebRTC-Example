@@ -20,8 +20,8 @@ function pageReady() {
 
   uuidInput = document.getElementById('call-id');
 
-  serverConnection = new WebSocket('wss://' + window.location.hostname + ':8443');
-  serverConnection.onmessage = gotMessageFromServer;
+  serverConnection = io.connect('https://localhost:8443');
+  serverConnection.on('message', gotMessageFromServer);
 
   navigator
     .mediaDevices
@@ -39,8 +39,7 @@ function gotMessageFromServer(message) {
     start();
   }
 
-  let signal = JSON.parse(message.data);
-
+  let signal = JSON.parse(message);
   if(signal.uuid === uuid) return;
 
   if(signal.sdp && signal.call === uuid) {
@@ -78,12 +77,11 @@ function start() {
 
 function gotIceCandidate(event) {
   if(event.candidate) {
-    serverConnection
-      .send(JSON.stringify({
-        'ice': event.candidate, 
-        'uuid': uuid,
-        'call': isCaller ? uuidInput.value : caller
-      }));
+    serverConnection.emit('message', JSON.stringify({
+      'ice': event.candidate, 
+      'uuid': uuid,
+      'call': isCaller ? uuidInput.value : caller
+    }));
   }
 }
 
@@ -91,12 +89,11 @@ function createdDescription(description) {
   peerConnection
     .setLocalDescription(description)
     .then(function() {
-      serverConnection
-        .send(JSON.stringify({
-          'sdp': peerConnection.localDescription,
-          'uuid': uuid,
-          'call': isCaller ? uuidInput.value : caller
-        }));
+      serverConnection.emit('message', JSON.stringify({
+        'sdp': peerConnection.localDescription,
+        'uuid': uuid,
+        'call': isCaller ? uuidInput.value : caller
+      }));
     }).catch(errorHandler);
 }
 
